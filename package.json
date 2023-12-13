@@ -1,14 +1,15 @@
 {
   "name": "content-disparity-check",
   "version": "1.0.0",
-  "description": "",
+  "description": "Tool for comparing data between ContentStack and FE app",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "e2e:disparity:check": "cypress run --spec=cypress/e2e/contentDisparity.cy.js --browser=chrome",
+    "e2e:disparity:check:tc": "npm run e2e:disparity:check -- --env host=https://staging.telecoms.com"
   },
-  "author": "",
+  "author": "Filip Nedović",
   "license": "ISC",
-  "dependencies": {
+  "devDependencies": {
     "cypress": "^13.6.1"
   }
 }
