@@ -6,7 +6,11 @@ module.exports = defineConfig({
   screenshotOnRunFailure: false,
   watchForFileChanges: false,
   reporter: "nyan",
+  numTestsKeptInMemory: 0,
   reporterOptions: {
     output: "output.json",
   },
+  env: {
+    host: ""
+  }
 });
