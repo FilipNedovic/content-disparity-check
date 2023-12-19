@@ -1,3 +1,5 @@
 node_modules
+.DS_Store
+*-report.json
 cypress/fixtures/data.json
-output.json
+cypress/.DS_Store

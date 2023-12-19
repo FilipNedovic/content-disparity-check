@@ -1,21 +1,24 @@
-import { BRANDS } from "../fixtures/brands";
+import * as constants from "../fixtures/constants";
 
 const getTestId = (index) => {
   let hostName = getHostName();
 
-  return `${BRANDS[hostName]}-0${index}:`;
+  return `${constants.BRANDS[hostName]}-0${index}:`;
 };
 
 const getHostName = () => {
   let host = Cypress.env("host");
   host = host.replace(".com", "");
 
-  return host.replace(/www.|staging.|.preview|.prod|https:\/\/|http:\/\//g, "").toUpperCase();
+  return host.replace(/www.|staging.|.preview|.prod|https:\/\/|http:\/\//g, "");
 };
 
 //prepare data to assert without special characters and whitespaces
 const prepareData = (pageData, csData) => {
-  return [pageData.replace(/[^a-zA-Z ]|\s/g, ""), csData.replace(/[^a-zA-Z ]|\s/g, "")];
+  return [
+    pageData.replace(/[^a-zA-Z ]|\s/g, ""),
+    csData.replace(/[^a-zA-Z ]|\s/g, ""),
+  ];
 };
 
 const extractTextFromCSExport = (html) => {
@@ -26,8 +29,11 @@ const extractTextFromCSExport = (html) => {
 };
 
 const getSanitizedData = (pageData, csData) => {
-  return prepareData(extractTextFromCSExport(pageData), extractTextFromCSExport(csData))
-}
+  return prepareData(
+    extractTextFromCSExport(pageData),
+    extractTextFromCSExport(csData)
+  );
+};
 
 export default {
   getTestId,
