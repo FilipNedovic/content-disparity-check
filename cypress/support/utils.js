@@ -2,15 +2,15 @@ import * as constants from "../fixtures/constants";
 
 const getTestId = (index) => {
   let hostName = getHostName();
-
-  return `${constants.BRANDS[hostName]}-0${index}:`;
+  console.log(hostName)
+  return `${constants.BRANDS[hostName].toUpperCase()}-0${index}:`;
 };
 
 const getHostName = () => {
   let host = Cypress.env("host");
   host = host.replace(".com", "");
 
-  return host.replace(/www.|staging.|.preview|.prod|https:\/\/|http:\/\//g, "");
+  return host.replace(/www.|staging.|.preview|.prod|https:\/\/|http:\/\//g, "").toUpperCase();
 };
 
 //prepare data to assert without special characters and whitespaces
