@@ -5,3 +5,9 @@ Cypress.Commands.add("findByTestId", (id) => {
 Cypress.Commands.add("findByModule", (module) => {
   return cy.get(`div[data-module=${module}]`);
 });
+
+Cypress.Commands.add('skipWhen', function (expression) {
+  if (expression) {
+    this.skip()
+  }
+})

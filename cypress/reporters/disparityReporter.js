@@ -1,28 +1,40 @@
-const chalk = require("chalk");
-const fs = require("fs");
-
-const report = {
-  low: [],
-  medium: [],
-  high: [],
-  critical: [],
-};
+const chalk = require("chalk"),
+  fs = require("fs"),
+  report = {
+    low: [],
+    medium: [],
+    high: [],
+    critical: [],
+    skipped: [],
+  };
 
 class Reporter {
   constructor(runner, options) {
     this._options = options;
     this._runner = runner;
 
+    this.onStart();
     this.onPass();
     this.onFail();
+    this.onSkip();
     this.onEnd();
   }
 
   DIFF_TRESHOLDS = {
-    low: 50,
-    medium: 150,
-    high: 250,
-    critical: 350,
+    LOW: 50,
+    MEDIUM: 150,
+    HIGH: 250,
+    CRITICAL: 350,
+  };
+  startTime;
+
+  onStart = () => {
+    this._runner.on("start", () => {
+      this.startTime = new Date();
+      console.log(
+        `Test execution started at ${this.startTime.toLocaleTimeString()}`
+      );
+    });
   };
 
   onPass = () => {
@@ -31,46 +43,84 @@ class Reporter {
     });
   };
 
+  onSkip = () => {
+    this._runner.on("pending", (test) => {
+      let field = this.extractFromTestTitle(test.title, " ", 2),
+        uid = this.extractFromTestTitle(test.title, "-", 2),
+        testId = this.extractFromTestTitle(test.title, " ", 0);
+
+      console.log(
+        chalk.blue("SKIPPED"),
+        `${testId} ${field} value missing, entry UID - ${uid}`
+      );
+      report.skipped.push({ UID: Number(uid), missing: field });
+    });
+  };
+
   onFail = () => {
     this._runner.on("fail", (test, err) => {
       console.log(chalk.red("FAILED"), test.title);
-      
-      let uid = test.title.split("-")[2].trim();
-      let diff = err.actual;
-      let entry = {
-        UID: Number(uid),
-        Diff: Number(diff),
-      };
 
-      let severity = this.determineDiffSeverity(diff);
-      report[severity].push(entry);
+      let uid = this.extractFromTestTitle(test.title, "-", 2),
+        diff = err.actual,
+        field = this.extractFromTestTitle(test.title, " ", 2),
+        severity = this.determineDiffSeverity(diff);
+      report[severity].push({
+        UID: Number(uid),
+        field: field,
+        diff: Number(diff),
+      });
     });
   };
 
   onEnd = () => {
     this._runner.on("end", () => {
+      let executionTime = new Date() - this.startTime;
+
+      console.log(`Test execution time: ${this.msToTime(executionTime)}`);
       console.log("Generating report...");
-      fs.writeFileSync("disparity-report.json", JSON.stringify(report), "utf-8");
+
+      fs.writeFileSync(
+        "disparity-report.json",
+        JSON.stringify(report),
+        "UTF-8"
+      );
     });
   };
 
+  extractFromTestTitle = (title, separator, index) => {
+    return title.split(separator)[index].trim();
+  };
+
   determineDiffSeverity = (diff) => {
-    if (diff < this.DIFF_TRESHOLDS["low"] === true) {
+    if (diff < this.DIFF_TRESHOLDS.LOW) {
       return "low";
     } else if (
-      diff > this.DIFF_TRESHOLDS["low"] === true &&
-      diff < this.DIFF_TRESHOLDS["medium"] === true
+      diff > this.DIFF_TRESHOLDS.LOW &&
+      diff < this.DIFF_TRESHOLDS.MEDIUM
     ) {
       return "medium";
     } else if (
-      diff > this.DIFF_TRESHOLDS["medium"] === true &&
-      diff < this.DIFF_TRESHOLDS["high"] === true
+      diff > this.DIFF_TRESHOLDS.MEDIUM &&
+      diff < this.DIFF_TRESHOLDS.HIGH
     ) {
       return "high";
-    } else {
+    } else if (diff > this.DIFF_TRESHOLDS.HIGH) {
       return "critical";
     }
   };
+
+  msToTime(duration) {
+    let seconds = Math.floor((duration / 1000) % 60),
+      minutes = Math.floor((duration / (1000 * 60)) % 60),
+      hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+
+    hours = hours < 10 ? "0" + hours : hours;
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+    seconds = seconds < 10 ? "0" + seconds : seconds;
+
+    return `${hours}:${minutes}:${seconds}`;
+  }
 }
 
 module.exports = Reporter;
