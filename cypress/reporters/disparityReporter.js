@@ -6,6 +6,7 @@ const chalk = require("chalk"),
     high: [],
     critical: [],
     skipped: [],
+    undetermined: []
   };
 
 class Reporter {
@@ -107,6 +108,8 @@ class Reporter {
       return "high";
     } else if (diff > this.DIFF_TRESHOLDS.HIGH) {
       return "critical";
+    } else {
+      return "undetermined"
     }
   };
 

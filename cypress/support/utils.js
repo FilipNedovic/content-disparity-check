@@ -1,9 +1,9 @@
-import * as constants from "../fixtures/constants";
+import { BRANDS } from "../fixtures/constants";
 
 const getTestId = (index) => {
     let hostName = getHostName();
-    console.log(hostName);
-    return `${constants.BRANDS[hostName].toUpperCase()}-0${index}:`;
+
+    return `${BRANDS[hostName].toUpperCase()}-0${index}:`;
   },
   getHostName = () => {
     let host = Cypress.env("host");
