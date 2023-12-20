@@ -10,9 +10,11 @@ Content from both sources (CS and FE) ) is being stripped of special characters 
 
 Entries which fail the test are being categorized by diff treshold into 4 buckets - low, medium, high and critical, and a report is produced. Current treshold values (found in `disparityReporter.js`) are placeholders and should be adjusted to the project requirements.
 
+Entries which don't have provided value for field in test (*null*, empty string) are being skipped and included in report.
+
 ## Getting Started
 
-### Dependencies
+### Prerequisites
 
 * Local machine must be connected to VPN.
 
@@ -20,7 +22,7 @@ Entries which fail the test are being categorized by diff treshold into 4 bucket
 
 * Clone this repo
 * Position via command line to the root of the project and run ``npm install``
-* Place the CS export into `cypress/fixtures/` folder (script accepts only *json* format, for the time being).
+* Place the CS export into `cypress/fixtures/` folder and name it `data.json` (script accepts only *json* format, for the time being).
 
 ### Executing program
 
@@ -35,3 +37,5 @@ Host should be either added to `cypress.config.js` or passed via `--env` argumen
 ```
 npm run e2e:disparity:check -- --env host=https://staging.test.com
 ```
+
+With current configuration tests are being run in headless mode and executing in Chrome browser.
