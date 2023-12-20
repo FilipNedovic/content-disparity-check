@@ -7,7 +7,7 @@ const data = require("../fixtures/data.json"),
   };
 
 describe("content disparity tests", () => {
-  data.forEach((csEntry) => {
+  data.forEach((csEntry, index) => {
     let testId = getTestId(index);
 
     it(`${testId} CS summary content matches FE, entry UID - ${csEntry.legacy_uid}`, () => {
