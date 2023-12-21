@@ -28,7 +28,7 @@ Cypress.Commands.add("matchFields", (csEntry, selector, field) => {
 
       cy.skipWhen(!csData.length);
 
-      const diff = pageData.length - csData.length;
+      const diff = csData.length - pageData.length;
       expect(diff).to.be.equal(0);
     });
 });
