@@ -4,7 +4,8 @@
   "description": "Tool for comparing data between ContentStack and FE app",
   "main": "index.js",
   "scripts": {
-    "e2e:disparity:check": "cypress run --spec=cypress/e2e/contentDisparity.cy.js --browser=chrome --reporter cypress/reporters/disparityReporter.js",
+    "prepare:data": "node cypress/support/prepareTestData.js",
+    "e2e:disparity:check": "npm run prepare:data && cypress run --spec=cypress/e2e/contentDisparity.cy.js --browser=chrome --reporter cypress/reporters/disparityReporter.js",
     "e2e:disparity:check:tc": "npm run e2e:disparity:check -- --env host=https://staging.telecoms.com"
   },
   "author": "Filip Nedović",
@@ -12,5 +13,8 @@
   "devDependencies": {
     "chalk": "^4.1.2",
     "cypress": "^13.6.1"
+  },
+  "dependencies": {
+    "node-jq": "^4.2.2"
   }
 }
