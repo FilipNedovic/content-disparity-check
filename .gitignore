@@ -1,6 +1,6 @@
 node_modules
 .DS_Store
-*-report.json
+*report.json
 cypress/fixtures/*.json
 cypress/.DS_Store
 cypress/downloads
