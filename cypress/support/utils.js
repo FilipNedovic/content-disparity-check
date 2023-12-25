@@ -26,15 +26,23 @@ const getTestId = (index) => {
 
     return temp.textContent || temp.innerText;
   },
-  getSanitizedData = (pageData, csData) => {
+  getPreparedData = (pageData, csData) => {
     return prepareData(
       extractTextFromCSExport(pageData),
       extractTextFromCSExport(csData)
     );
+  },
+  getNewUrl = (uid) => {
+    const exportData = require("../fixtures/exportData.json");
+
+    return exportData.filter((entry) => {
+      return entry.legacy_uid == uid;
+    });
   };
 
 export default {
   getTestId,
-  getSanitizedData,
+  getPreparedData,
   extractTextFromCSExport,
+  getNewUrl
 };

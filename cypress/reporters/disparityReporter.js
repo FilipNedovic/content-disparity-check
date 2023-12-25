@@ -13,6 +13,8 @@ class Reporter {
   constructor(runner, options) {
     this._options = options;
     this._runner = runner;
+    this.startTime = new Date();
+    this.reportName = "disparity_report.json";
 
     this.onStart();
     this.onPass();
@@ -28,6 +30,7 @@ class Reporter {
     CRITICAL: 350,
   };
   startTime;
+  reportName;
 
   onStart = () => {
     this._runner.on("start", () => {
@@ -82,7 +85,7 @@ class Reporter {
       console.log("Generating report...");
 
       fs.writeFileSync(
-        "disparity-report.json",
+        this.reportName,
         JSON.stringify(report),
         "UTF-8"
       );
