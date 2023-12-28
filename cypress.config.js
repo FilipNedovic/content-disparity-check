@@ -7,6 +7,7 @@ module.exports = defineConfig({
   screenshotOnRunFailure: false,
   watchForFileChanges: false,
   numTestsKeptInMemory: 0,
+  chromeWebSecurity: false,
   env: {
     host: "",
   },

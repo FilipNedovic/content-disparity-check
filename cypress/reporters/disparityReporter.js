@@ -24,10 +24,10 @@ class Reporter {
   }
 
   DIFF_TRESHOLDS = {
-    LOW: 50,
-    MEDIUM: 150,
-    HIGH: 250,
-    CRITICAL: 350,
+    LOW: 0,
+    MEDIUM: -150,
+    HIGH: -300,
+    CRITICAL: -450,
   };
   startTime;
   reportName;
@@ -51,7 +51,7 @@ class Reporter {
     this._runner.on("pending", (test) => {
       let field = this.extractFromTestTitle(test.title, " ", 2),
         uid = this.extractFromTestTitle(test.title, "-", 2),
-        testId = this.extractFromTestTitle(test.title, " ", 0);
+      testId = this.extractFromTestTitle(test.title, " ", 0);
 
       console.log(
         chalk.blue("SKIPPED"),
@@ -100,16 +100,16 @@ class Reporter {
     if (diff < this.DIFF_TRESHOLDS.LOW) {
       return "low";
     } else if (
-      diff > this.DIFF_TRESHOLDS.LOW &&
-      diff < this.DIFF_TRESHOLDS.MEDIUM
+      diff < this.DIFF_TRESHOLDS.LOW &&
+      diff > this.DIFF_TRESHOLDS.MEDIUM
     ) {
       return "medium";
     } else if (
-      diff > this.DIFF_TRESHOLDS.MEDIUM &&
-      diff < this.DIFF_TRESHOLDS.HIGH
+      diff < this.DIFF_TRESHOLDS.MEDIUM &&
+      diff > this.DIFF_TRESHOLDS.HIGH
     ) {
       return "high";
-    } else if (diff > this.DIFF_TRESHOLDS.HIGH) {
+    } else if (diff < this.DIFF_TRESHOLDS.HIGH) {
       return "critical";
     } else {
       return "undetermined"

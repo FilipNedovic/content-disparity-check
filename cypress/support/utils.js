@@ -31,18 +31,10 @@ const getTestId = (index) => {
       extractTextFromCSExport(pageData),
       extractTextFromCSExport(csData)
     );
-  },
-  getNewUrl = (uid) => {
-    const exportData = require("../fixtures/exportData.json");
-
-    return exportData.filter((entry) => {
-      return entry.legacy_uid == uid;
-    });
-  };
+  }
 
 export default {
   getTestId,
   getPreparedData,
   extractTextFromCSExport,
-  getNewUrl
 };
